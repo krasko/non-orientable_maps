@@ -1,2 +1,2 @@
 # non-orientable_maps
-Enumeration of maps on surfaces without a boundary and with $g$ crosscaps.
+Enumeration of maps on non-orientable surfaces with $g$ crosscaps without a boundary.
