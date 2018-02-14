@@ -1239,12 +1239,6 @@ var (
 	edges = flag.Int("edges", 6, "The number of edges to compute up to.")
 )
 
-type str string
-
-func (s str) String() string {
-	return string(s)
-}
-
 func main() {
 	wd, err := os.Getwd()
 	if err != nil {
