@@ -9,7 +9,6 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 )
 
 // degs is a slice of vertex degrees
@@ -1236,8 +1235,8 @@ func countOnOrbifold(darts int, orientable bool, chi, h int, bp ...int) (cnt int
 }
 
 var (
-	genus = flag.Int("genus", 8, "Genus to compute up to.")
-	edges = flag.Int("edges", 8, "The number of edges to compute up to.")
+	genus = flag.Int("genus", 6, "Genus to compute up to.")
+	edges = flag.Int("edges", 6, "The number of edges to compute up to.")
 )
 
 type str string
@@ -1247,11 +1246,6 @@ func (s str) String() string {
 }
 
 func main() {
-	defer func(t time.Time) {
-		fmt.Println(time.Now().Sub(t))
-		fmt.Println(zeroCount)
-	}(time.Now())
-
 	wd, err := os.Getwd()
 	if err != nil {
 		fmt.Println(err)
@@ -1297,7 +1291,7 @@ func main() {
 			continue
 		}
 		for e := 0; e <= *edges; e++ {
-			t := time.Now()
+			//t := time.Now()
 			for len(cnt[e]) <= *genus {
 				cnt[e] = append(cnt[e], 0)
 			}
@@ -1305,22 +1299,20 @@ func main() {
 				continue
 			}
 			val := (Epi - EpiPlus) * countOnOrbifold(2*e/L, signStr == "[+]", chi, H, m...)
-			fmt.Println(e, 2*e/L, signStr == "[+]", Chi, H, m, "====", val, int64(time.Now().Sub(t))/1e6)
+			//fmt.Println(e, 2*e/L, signStr == "[+]", Chi, H, m, "====", val, int64(time.Now().Sub(t))/1e6)
 			cnt[e][CC] += val
 		}
 	}
-	fmt.Println(`# Reflexible maps with E edges on orientable surfaces of genus G.
-# Unsensed maps = (sensed maps + reflexible maps) / 2.
-`)
+	fmt.Println(`# Maps with E edges on non-orientable surfaces with G crosscaps.`)
 	for i, byGenus := range cnt {
 		if i == 0 {
 			fmt.Printf("%20s", "E\\G")
-			for g := range byGenus {
-				fmt.Printf("%20d", g)
+			for g := range byGenus[1:] {
+				fmt.Printf("%20d", g+1)
 			}
 		} else {
 			fmt.Printf("%20d", i)
-			for _, c := range byGenus {
+			for _, c := range byGenus[1:] {
 				fmt.Printf("%20d", div(c, 4*int64(i)))
 			}
 		}
